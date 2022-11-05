@@ -1,0 +1,37 @@
+@startuml
+
+    [*] --> Exploring : dist. < 5cm
+    Exploring : Move forward
+
+    Exploring --> obstacle : dist. < safe distance
+
+    state "Obstacle detected" as obstacle
+    obstacle : Stop
+
+    obstacle --> lffs
+
+    state "Looking for free space" as lffs
+    lffs : Scan for free space
+    lffs : Store max distance
+
+    state side <<choice>>
+    lffs --> side
+
+    side --> turnLeft : dist. left > dist. right
+    side --> turnRight : dist. right > dist. left
+
+    state "Turn left" as turnLeft
+    state "Turn right" as turnRight
+
+    turnLeft --> Exploring : dist. >= max dist. / 2
+    turnRight --> Exploring : dist. >= max dist. / 2
+    
+/'     Exploring --> [*] : reset
+    obstacle --> [*] : reset
+    lffs --> [*] : reset
+    turnLeft --> [*] : reset
+    turnRight --> [*] : reset '/
+
+
+
+@enduml
